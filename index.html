@@ -6,14 +6,14 @@
     <title>Courageous Vision</title>
     <style>
         :root {
-            --bg-color: #eeeae2; /* Updated background color */
+            --bg-color: #eeeae2;
             --card-bg: #ffffff;
             --text-primary: #1e293b;
             --text-secondary: #475569;
-            --accent-color: #0284c7;
-            --accent-light: #e0f2fe;
-            --number-color: #e2e8f0; /* Darkened for detail view */
-            --grid-number-color: #64748b; /* Made significantly darker for the main page */
+            --accent-color: #1e4b7b; /* Updated to requested custom blue */
+            --accent-light: #e6eff8; /* Soft complementary background for the new blue */
+            --number-color: #e2e8f0; 
+            --grid-number-color: #94a3b8; /* Lighter grey for main page background numbers */
             --pill-border: #e2e8f0;
             --transition-speed: 0.25s;
         }
@@ -88,7 +88,7 @@
             font-size: 13rem;
             font-weight: 900;
             color: var(--grid-number-color);
-            opacity: 0.35; /* Adjusted opacity for the darker color */
+            opacity: 0.25; /* Lightened opacity to guarantee text contrast */
             z-index: 0;
             line-height: 1;
             /* Position to the left */
@@ -231,7 +231,7 @@
         }
 
         .card-metrics {
-            background-color: var(--bg-color); /* Matches the new outer background */
+            background-color: var(--bg-color);
             padding: 1.25rem;
             border-radius: 8px;
             border: 1px dashed #d1d5db;
@@ -468,7 +468,7 @@
     <script>
         function showDetail(cardNumber) {
             document.getElementById('grid-view').style.display = 'none';
-            document.getElementById('main-header').style.display = 'none'; // Hide header to save space in detail view
+            document.getElementById('main-header').style.display = 'none'; 
             
             const fullCards = document.querySelectorAll('.full-card');
             fullCards.forEach(card => card.classList.remove('active'));
