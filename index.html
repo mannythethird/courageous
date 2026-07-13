@@ -10,10 +10,10 @@
             --card-bg: #ffffff;
             --text-primary: #1e293b;
             --text-secondary: #475569;
-            --accent-color: #1e4b7b; /* Updated to requested custom blue */
-            --accent-light: #e6eff8; /* Soft complementary background for the new blue */
+            --accent-color: #1e4b7b; 
+            --accent-light: #e6eff8; /* Soft light blue */
             --number-color: #e2e8f0; 
-            --grid-number-color: #94a3b8; /* Lighter grey for main page background numbers */
+            --grid-number-color: #94a3b8; 
             --pill-border: #e2e8f0;
             --transition-speed: 0.25s;
         }
@@ -28,12 +28,11 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-primary);
-            /* Prevent scrolling on the main dashboard */
             height: 100vh; 
             display: flex;
             flex-direction: column;
             padding: 1.5rem;
-            overflow-y: auto; /* Only scrolls if detail view is long */
+            overflow-y: auto; 
         }
 
         .page-header {
@@ -54,7 +53,7 @@
             grid-template-columns: repeat(3, 1fr);
             grid-template-rows: repeat(2, 1fr);
             gap: 1rem;
-            flex-grow: 1; /* Forces the grid to take up exactly the rest of the screen */
+            flex-grow: 1; 
             animation: fadeIn var(--transition-speed) ease-in;
         }
 
@@ -69,7 +68,6 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
             display: flex;
             flex-direction: column;
-            /* Push text to the right to balance the left-aligned number */
             align-items: flex-end;
             justify-content: center;
             text-align: right;
@@ -88,10 +86,9 @@
             font-size: 13rem;
             font-weight: 900;
             color: var(--grid-number-color);
-            opacity: 0.25; /* Lightened opacity to guarantee text contrast */
+            opacity: 0.25; 
             z-index: 0;
             line-height: 1;
-            /* Position to the left */
             top: 50%;
             left: -15px;
             transform: translateY(-50%);
@@ -231,10 +228,10 @@
         }
 
         .card-metrics {
-            background-color: var(--bg-color);
+            background-color: var(--accent-light); /* Uses the soft light blue */
             padding: 1.25rem;
             border-radius: 8px;
-            border: 1px dashed #d1d5db;
+            border: 1px dashed #b8cde0; /* Slightly darker complementary blue border */
         }
 
         .metrics-label {
@@ -242,7 +239,7 @@
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            color: var(--text-secondary);
+            color: var(--accent-color); /* Matches the blue text to the blue bg */
             margin-bottom: 0.75rem;
             display: block;
         }
@@ -261,6 +258,7 @@
             font-weight: 600;
             padding: 0.3rem 0.8rem;
             border-radius: 99px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05); /* Adds a tiny shadow so white pops off the blue */
         }
 
         /* Responsive adjustments for smaller screens (tablets/phones) */
@@ -282,7 +280,7 @@
 <body>
 
     <div class="page-header" id="main-header">
-        <h1>Courageous Vision</h1>
+        <h1>The 6 Marks of Courageous Winning</h1>
     </div>
 
     <!-- DASHBOARD VIEW -->
