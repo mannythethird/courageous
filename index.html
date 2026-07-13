@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Courageous Vision</title>
+    <title>The 6 Marks of Courageous Winning</title>
     <style>
         :root {
             --bg-color: #eeeae2;
@@ -11,11 +11,11 @@
             --text-primary: #1e293b;
             --text-secondary: #475569;
             --accent-color: #1e4b7b; 
-            --accent-light: #e6eff8; /* Soft light blue */
-            --number-color: #e2e8f0; 
-            --grid-number-color: #94a3b8; 
+            --accent-light: #e6eff8; 
+            --number-color: #f1f5f9; 
             --pill-border: #e2e8f0;
-            --transition-speed: 0.25s;
+            --nav-inactive: #cbd5e1;
+            --transition-speed: 0.3s;
         }
 
         * {
@@ -31,135 +31,95 @@
             height: 100vh; 
             display: flex;
             flex-direction: column;
-            padding: 1.5rem;
-            overflow-y: auto; 
+            overflow: hidden; /* Prevents whole-page scrolling */
         }
 
-        .page-header {
-            text-align: center;
-            flex-shrink: 0;
-            margin-bottom: 1.5rem;
-        }
-
-        .page-header h1 {
-            font-size: 2rem;
-            font-weight: 800;
-            letter-spacing: -0.02em;
-        }
-
-        /* --- DASHBOARD (Grid View) --- */
-        #grid-view {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            grid-template-rows: repeat(2, 1fr);
-            gap: 1rem;
-            flex-grow: 1; 
-            animation: fadeIn var(--transition-speed) ease-in;
-        }
-
-        .summary-card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--pill-border);
-            border-radius: 12px;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            transition: all var(--transition-speed) ease;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+        /* --- LAYOUT: Mobile First --- */
+        .app-container {
             display: flex;
             flex-direction: column;
-            align-items: flex-end;
-            justify-content: center;
-            text-align: right;
-            padding: 1.5rem 2rem 1.5rem 1rem;
-        }
-
-        .summary-card:hover {
-            transform: scale(1.02);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            border-color: var(--accent-color);
-        }
-
-        .summary-card::before {
-            content: attr(data-number);
-            position: absolute;
-            font-size: 13rem;
-            font-weight: 900;
-            color: var(--grid-number-color);
-            opacity: 0.25; 
-            z-index: 0;
-            line-height: 1;
-            top: 50%;
-            left: -15px;
-            transform: translateY(-50%);
-            pointer-events: none;
-        }
-
-        .summary-card h2 {
-            position: relative;
-            z-index: 1;
-            font-size: 1.4rem;
-            font-weight: 800;
-            color: var(--text-primary);
-        }
-
-        /* --- DETAIL VIEW --- */
-        #detail-view {
-            display: none;
-            max-width: 800px;
-            margin: 0 auto;
+            height: 100%;
             width: 100%;
-            animation: fadeIn var(--transition-speed) ease-in;
-            padding-bottom: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* --- TOP HEADER & GAMIFICATION --- */
+        .header-section {
+            padding: 1.5rem 1.5rem 1rem 1.5rem;
+            text-align: center;
+            background-color: var(--bg-color);
+            flex-shrink: 0;
+            z-index: 10;
         }
 
-        .back-btn {
-            background: none;
-            border: none;
+        .header-section h1 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
             color: var(--accent-color);
-            font-size: 1rem;
-            font-weight: 700;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            transition: background 0.2s;
         }
 
-        .back-btn:hover {
-            background-color: var(--card-bg);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        .progress-container {
+            width: 100%;
+            max-width: 400px;
+            background-color: var(--nav-inactive);
+            height: 8px;
+            border-radius: 99px;
+            margin: 0 auto 0.5rem;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background-color: var(--accent-color);
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .progress-text {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* --- DETAIL AREA (Main Content) --- */
+        .detail-area {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 0 1.5rem 2rem 1.5rem;
+            position: relative;
         }
 
         .full-card {
             display: none;
             background-color: var(--card-bg);
-            border-radius: 12px;
-            padding: 2.5rem;
+            border-radius: 16px;
+            padding: 2.5rem 2rem;
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
             border: 1px solid var(--pill-border);
             position: relative;
             overflow: hidden;
+            animation: slideUp var(--transition-speed) ease-out forwards;
         }
 
         .full-card.active {
             display: block;
         }
-        
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         .full-card::before {
             content: attr(data-number);
             position: absolute;
-            top: -30px;
+            top: -20px;
             right: -10px;
-            font-size: 15rem;
+            font-size: 12rem;
             font-weight: 900;
             color: var(--number-color);
             line-height: 1;
@@ -194,8 +154,9 @@
         }
 
         .full-card h2 {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             font-weight: 800;
+            line-height: 1.2;
         }
 
         .intro {
@@ -215,7 +176,7 @@
             padding-left: 1.5rem;
             margin-bottom: 0.75rem;
             color: var(--text-secondary);
-            font-size: 1rem;
+            font-size: 0.95rem;
         }
 
         li::before {
@@ -228,10 +189,10 @@
         }
 
         .card-metrics {
-            background-color: var(--accent-light); /* Uses the soft light blue */
+            background-color: var(--accent-light);
             padding: 1.25rem;
-            border-radius: 8px;
-            border: 1px dashed #b8cde0; /* Slightly darker complementary blue border */
+            border-radius: 12px;
+            border: 1px dashed #b8cde0;
         }
 
         .metrics-label {
@@ -239,7 +200,7 @@
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            color: var(--accent-color); /* Matches the blue text to the blue bg */
+            color: var(--accent-color);
             margin-bottom: 0.75rem;
             display: block;
         }
@@ -254,60 +215,159 @@
             background-color: white;
             border: 1px solid var(--pill-border);
             color: var(--text-primary);
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: 600;
             padding: 0.3rem 0.8rem;
             border-radius: 99px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05); /* Adds a tiny shadow so white pops off the blue */
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
         }
 
-        /* Responsive adjustments for smaller screens (tablets/phones) */
-        @media (max-width: 900px) {
-            body { height: auto; overflow-y: auto; }
-            #grid-view { 
-                grid-template-columns: repeat(2, 1fr); 
-                grid-template-rows: auto;
-                height: auto; 
-            }
-            .summary-card { padding: 3rem 2rem 3rem 1rem; align-items: flex-end; }
+        /* --- MASTER NAV (Bottom on Mobile) --- */
+        .master-nav {
+            background-color: var(--card-bg);
+            padding: 1rem 1.5rem 1.5rem 1.5rem; /* Extra padding for bottom screen edge */
+            display: flex;
+            justify-content: space-between;
+            box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.05);
+            border-top: 1px solid var(--pill-border);
+            z-index: 20;
         }
-        @media (max-width: 600px) {
-            #grid-view { grid-template-columns: 1fr; }
-            .full-card { padding: 1.5rem; }
+
+        .nav-item {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background-color: var(--bg-color);
+            color: var(--nav-inactive);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            font-weight: 800;
+            cursor: pointer;
+            border: 2px solid var(--nav-inactive);
+            transition: all 0.2s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* State: Active (Currently viewing) */
+        .nav-item.active {
+            transform: translateY(-5px);
+            background-color: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+            box-shadow: 0 4px 10px rgba(30, 75, 123, 0.3);
+        }
+
+        /* State: Unlocked (Viewed previously) */
+        .nav-item.unlocked:not(.active) {
+            background-color: var(--accent-light);
+            color: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+
+        /* --- DESKTOP/TABLET SPLIT SCREEN --- */
+        @media (min-width: 768px) {
+            .app-container {
+                flex-direction: row;
+                padding: 2rem;
+                gap: 2rem;
+            }
+
+            .header-section {
+                text-align: left;
+                padding: 0 0 2rem 0;
+            }
+
+            .progress-container {
+                margin: 0 0 0.5rem 0;
+            }
+
+            /* Master Nav becomes a Sidebar */
+            .sidebar-wrapper {
+                width: 300px;
+                display: flex;
+                flex-direction: column;
+                flex-shrink: 0;
+            }
+
+            .master-nav {
+                flex-direction: column;
+                padding: 0;
+                background: none;
+                box-shadow: none;
+                border: none;
+                gap: 1rem;
+            }
+
+            .nav-item {
+                width: 100%;
+                border-radius: 12px;
+                height: 60px;
+                justify-content: flex-start;
+                padding-left: 1.5rem;
+                background-color: var(--card-bg);
+            }
+
+            .nav-item::after {
+                content: attr(data-title);
+                margin-left: 1rem;
+                font-size: 1rem;
+            }
+
+            .nav-item.active {
+                transform: translateX(10px);
+            }
+
+            .detail-area {
+                padding: 0;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+
+            .full-card {
+                padding: 3.5rem;
+            }
         }
     </style>
 </head>
 <body>
 
-    <div class="page-header" id="main-header">
-        <h1>The 6 Marks of Courageous Winning</h1>
-    </div>
+<div class="app-container">
 
-    <!-- DASHBOARD VIEW -->
-    <div id="grid-view">
-        <div class="summary-card" data-number="1" onclick="showDetail(1)">
-            <h2>The Mission Is Moving</h2>
+    <!-- Sidebar wrapper helps structure the desktop view -->
+    <div class="sidebar-wrapper">
+        <div class="header-section">
+            <h1>The 6 Marks of Courageous Winning</h1>
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            <p class="progress-text" id="progress-text">0 of 6 Unlocked</p>
         </div>
-        <div class="summary-card" data-number="2" onclick="showDetail(2)">
-            <h2>Leaders Are Multiplying</h2>
-        </div>
-        <div class="summary-card" data-number="3" onclick="showDetail(3)">
-            <h2>Men Are Transforming</h2>
-        </div>
-        <div class="summary-card" data-number="4" onclick="showDetail(4)">
-            <h2>Groups Feel Like Brotherhood</h2>
-        </div>
-        <div class="summary-card" data-number="5" onclick="showDetail(5)">
-            <h2>The Movement Is Spreading</h2>
-        </div>
-        <div class="summary-card" data-number="6" onclick="showDetail(6)">
-            <h2>The Culture Feels Right</h2>
+
+        <!-- MASTER NAV -->
+        <div class="master-nav" id="master-nav">
+            <div class="nav-item" data-title="Mission Moving" onclick="loadMark(1)" id="nav-1">1</div>
+            <div class="nav-item" data-title="Leaders Multiplying" onclick="loadMark(2)" id="nav-2">2</div>
+            <div class="nav-item" data-title="Men Transforming" onclick="loadMark(3)" id="nav-3">3</div>
+            <div class="nav-item" data-title="Brotherhood" onclick="loadMark(4)" id="nav-4">4</div>
+            <div class="nav-item" data-title="Movement Spreading" onclick="loadMark(5)" id="nav-5">5</div>
+            <div class="nav-item" data-title="Culture Feels Right" onclick="loadMark(6)" id="nav-6">6</div>
         </div>
     </div>
 
-    <!-- DETAIL VIEW -->
-    <div id="detail-view">
-        <button class="back-btn" onclick="showGrid()">&larr; Back to Dashboard</button>
+    <!-- DETAIL AREA -->
+    <div class="detail-area" id="detail-area">
+        
+        <!-- Welcome Screen (Shown initially) -->
+        <div id="detail-0" class="full-card active">
+            <div class="card-content" style="text-align: center; padding: 2rem 0;">
+                <div class="card-number-badge" style="margin: 0 auto 1.5rem auto; width: 60px; height: 60px; font-size: 2rem;">🛡️</div>
+                <h2>Equipping Men for the Mission</h2>
+                <p class="intro" style="margin-top: 1rem;">Tap a number below to unlock the 6 Marks of Courageous Winning.</p>
+            </div>
+        </div>
 
         <!-- Detail 1 -->
         <div id="detail-1" class="full-card" data-number="1">
@@ -461,29 +521,55 @@
                 </div>
             </div>
         </div>
+
     </div>
+</div>
 
-    <script>
-        function showDetail(cardNumber) {
-            document.getElementById('grid-view').style.display = 'none';
-            document.getElementById('main-header').style.display = 'none'; 
-            
-            const fullCards = document.querySelectorAll('.full-card');
-            fullCards.forEach(card => card.classList.remove('active'));
-            
-            document.getElementById('detail-view').style.display = 'block';
-            document.getElementById('detail-' + cardNumber).classList.add('active');
-            
-            window.scrollTo({ top: 0, behavior: 'instant' });
-        }
+<script>
+    // Gamification state tracker
+    const unlockedMarks = new Set();
+    const totalMarks = 6;
 
-        function showGrid() {
-            document.getElementById('detail-view').style.display = 'none';
-            document.getElementById('main-header').style.display = 'block';
-            document.getElementById('grid-view').style.display = 'grid';
-            
-            window.scrollTo({ top: 0, behavior: 'instant' });
+    function loadMark(number) {
+        // 1. Hide all cards
+        document.querySelectorAll('.full-card').forEach(card => {
+            card.classList.remove('active');
+        });
+
+        // 2. Show selected card and scroll detail area to top
+        document.getElementById(`detail-${number}`).classList.add('active');
+        document.getElementById('detail-area').scrollTop = 0;
+
+        // 3. Update Nav UI logic
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.classList.remove('active'); // Remove active from all
+        });
+        const currentNav = document.getElementById(`nav-${number}`);
+        currentNav.classList.add('active');
+        currentNav.classList.add('unlocked');
+
+        // 4. Update Gamification Progress
+        unlockedMarks.add(number);
+        updateProgress();
+    }
+
+    function updateProgress() {
+        const count = unlockedMarks.size;
+        const percentage = (count / totalMarks) * 100;
+        
+        // Update Bar
+        document.getElementById('progress-bar').style.width = `${percentage}%`;
+        
+        // Update Text
+        const textElement = document.getElementById('progress-text');
+        if (count === totalMarks) {
+            textElement.innerHTML = "🎉 100% Fully Unlocked!";
+            textElement.style.color = "var(--accent-color)";
+        } else {
+            textElement.innerText = `${count} of ${totalMarks} Unlocked`;
         }
-    </script>
+    }
+</script>
+
 </body>
 </html>
