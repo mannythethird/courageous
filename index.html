@@ -9,12 +9,11 @@
             --bg-color: #eeeae2;
             --card-bg: #ffffff;
             --text-primary: #1e293b;
-            --text-secondary: #475569;
+            --text-secondary: #64748b;
             --accent-color: #1e4b7b; 
             --accent-light: #e6eff8; 
-            --number-color: #e2e8f0; 
-            --grid-number-color: #cbd5e1; 
             --pill-border: #e2e8f0;
+            --grid-number-color: #94a3b8;
             --transition-speed: 0.3s;
         }
 
@@ -28,141 +27,128 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-primary);
-            /* 100dvh ensures it fits exactly inside mobile browser windows */
             height: 100dvh; 
             overflow: hidden; 
             display: flex;
             flex-direction: column;
         }
 
-        /* --- DASHBOARD VIEW (Always fits on screen) --- */
+        /* --- DASHBOARD VIEW --- */
         #dashboard-view {
             display: flex;
             flex-direction: column;
             height: 100%;
-            padding: 1rem;
-            max-width: 1000px;
+            padding: 2rem 1.25rem;
+            max-width: 800px;
             margin: 0 auto;
             width: 100%;
             animation: fadeIn var(--transition-speed) ease-in;
         }
 
         .header-section {
-            text-align: center;
-            flex-shrink: 0;
-            margin-bottom: 1rem;
-        }
-
-        .header-section h1 {
-            font-size: clamp(1.2rem, 5vw, 1.8rem);
-            font-weight: 800;
-            color: var(--accent-color);
-            margin-bottom: 0.5rem;
-            line-height: 1.2;
-        }
-
-        .progress-container {
-            width: 100%;
-            max-width: 300px;
-            background-color: #d1d5db;
-            height: 6px;
-            border-radius: 99px;
-            margin: 0 auto 0.4rem;
-            overflow: hidden;
-        }
-
-        .progress-bar {
-            height: 100%;
-            width: 0%;
-            background-color: var(--accent-color);
-            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .progress-text {
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        /* The 2x3 Mobile Grid */
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            grid-template-rows: repeat(3, 1fr);
-            gap: 0.75rem;
-            flex-grow: 1; /* Automatically stretches to fill remaining screen height */
-        }
-
-        .summary-card {
-            background-color: var(--card-bg);
-            border: 2px solid var(--pill-border);
-            border-radius: 12px;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            flex-shrink: 0;
+            margin-bottom: 1.5rem;
+        }
+
+        .header-section h1 {
+            font-size: clamp(1.6rem, 6vw, 2.2rem);
+            font-weight: 800;
+            color: var(--text-primary);
+            line-height: 1.1;
             text-align: center;
-            padding: 0.5rem;
-            transition: all var(--transition-speed) ease;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+            letter-spacing: -0.02em;
+        }
+
+        /* The Stacked List */
+        .list-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+            flex-grow: 1; 
+            justify-content: center; /* Centers the list perfectly */
+        }
+
+        .list-item {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.5rem 1rem 1rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+            border: 1px solid var(--pill-border);
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* Large faded numbers for the grid */
-        .summary-card::before {
-            content: attr(data-number);
-            position: absolute;
-            font-size: clamp(6rem, 20vw, 9rem);
-            font-weight: 900;
-            color: var(--grid-number-color);
-            opacity: 0.25;
-            z-index: 0;
-            line-height: 1;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            pointer-events: none;
-            transition: color 0.3s ease, opacity 0.3s ease;
+        .list-item:active {
+            transform: scale(0.97);
         }
 
-        .summary-card h2 {
-            position: relative;
-            z-index: 1;
-            font-size: clamp(0.9rem, 3.5vw, 1.2rem);
+        /* The Large Styled Number */
+        .list-number {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--grid-number-color);
+            opacity: 0.35;
+            width: 60px;
+            text-align: center;
+            line-height: 1;
+            flex-shrink: 0;
+            margin-right: 0.75rem;
+            transition: all 0.3s ease;
+        }
+
+        .list-title {
+            font-size: 1.15rem;
             font-weight: 800;
             color: var(--text-primary);
+            flex-grow: 1;
             line-height: 1.2;
             transition: color 0.3s ease;
         }
 
-        /* GAMIFICATION: State when a card is 'Unlocked' */
-        .summary-card.unlocked {
-            background-color: var(--accent-color);
-            border-color: var(--accent-color);
-            box-shadow: 0 4px 10px rgba(30, 75, 123, 0.2);
-            transform: scale(0.98);
-        }
-        .summary-card.unlocked h2 {
-            color: white;
-        }
-        .summary-card.unlocked::before {
-            color: #ffffff;
-            opacity: 0.15;
+        .list-chevron {
+            color: var(--grid-number-color);
+            font-size: 1.5rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            transform: translateX(0);
         }
 
-        /* --- DETAIL VIEW (Scrollable) --- */
+        /* STATE: Unlocked (Whole Card Turns Blue) */
+        .list-item.unlocked {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            box-shadow: 0 8px 15px rgba(30, 75, 123, 0.25);
+        }
+        
+        .list-item.unlocked .list-number {
+            color: #ffffff;
+            opacity: 0.25; /* Soft white watermark effect against the dark blue */
+        }
+
+        .list-item.unlocked .list-title {
+            color: #ffffff;
+        }
+
+        .list-item.unlocked .list-chevron {
+            color: #ffffff;
+            opacity: 0.5;
+            transform: translateX(4px);
+        }
+
+        /* --- DETAIL VIEW --- */
         #detail-view {
             display: none;
             height: 100dvh;
-            overflow-y: auto; /* Allows scrolling ONLY when reading a specific card */
-            padding: 1.5rem 1rem 3rem 1rem;
+            overflow-y: auto; 
+            padding: 1.5rem 1rem 4rem 1rem;
             background-color: var(--bg-color);
-            animation: slideIn var(--transition-speed) ease-out;
+            animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .detail-wrapper {
@@ -171,27 +157,27 @@
         }
 
         @keyframes slideIn {
-            from { opacity: 0; transform: translateY(15px); }
+            from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .back-btn {
-            background: var(--card-bg);
-            border: 1px solid var(--pill-border);
-            color: var(--accent-color);
-            font-size: 0.9rem;
+            background: #ffffff;
+            border: none;
+            color: var(--text-primary);
+            font-size: 0.95rem;
             font-weight: 700;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            margin-bottom: 1rem;
-            padding: 0.6rem 1.2rem;
+            margin-bottom: 1.5rem;
+            padding: 0.75rem 1.25rem;
             border-radius: 99px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            transition: all 0.2s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            transition: transform 0.2s ease;
             position: sticky;
-            top: 0;
+            top: 1rem;
             z-index: 50;
         }
 
@@ -202,106 +188,91 @@
         .full-card {
             display: none;
             background-color: var(--card-bg);
-            border-radius: 16px;
-            padding: 2rem 1.5rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
-            border: 1px solid var(--pill-border);
-            position: relative;
-            overflow: hidden;
+            border-radius: 24px;
+            padding: 2.5rem 1.75rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05);
+            border: 1px solid #ffffff;
         }
 
         .full-card.active {
             display: block;
         }
 
-        .full-card::before {
-            content: attr(data-number);
-            position: absolute;
-            top: -20px;
-            right: -10px;
-            font-size: 10rem;
-            font-weight: 900;
-            color: var(--number-color);
-            line-height: 1;
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        .card-content {
-            position: relative;
-            z-index: 1;
-        }
-
         .card-header-row {
             display: flex;
             align-items: center;
             gap: 1rem;
-            margin-bottom: 1rem;
+            margin-bottom: 1.25rem;
         }
 
         .card-number-badge {
-            background-color: var(--accent-light);
-            color: var(--accent-color);
-            font-size: 1.3rem;
+            background-color: var(--accent-color);
+            color: #ffffff;
+            font-size: 1.5rem;
             font-weight: 800;
-            width: 40px;
-            height: 40px;
+            width: 48px;
+            height: 48px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 50%;
+            border-radius: 14px;
             flex-shrink: 0;
+            box-shadow: 0 6px 12px rgba(30, 75, 123, 0.2);
         }
 
         .full-card h2 {
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             font-weight: 800;
-            line-height: 1.2;
+            line-height: 1.15;
+            letter-spacing: -0.02em;
         }
 
         .intro {
-            font-size: 1.05rem;
+            font-size: 1.1rem;
             font-weight: 600;
             color: var(--accent-color);
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.75rem;
+            line-height: 1.4;
         }
 
         ul {
             list-style-type: none;
-            margin-bottom: 2rem;
+            margin-bottom: 2.5rem;
         }
 
         li {
             position: relative;
-            padding-left: 1.5rem;
-            margin-bottom: 0.75rem;
+            padding-left: 1.75rem;
+            margin-bottom: 1rem;
             color: var(--text-secondary);
-            font-size: 0.95rem;
+            font-size: 1rem;
+            line-height: 1.5;
         }
 
         li::before {
-            content: "•";
+            content: "→";
             color: var(--accent-color);
-            font-size: 1.5rem;
+            font-weight: 800;
+            font-size: 1.1rem;
             position: absolute;
             left: 0;
-            top: -0.3rem;
+            top: 0;
         }
 
         .card-metrics {
             background-color: var(--accent-light);
-            padding: 1.25rem;
-            border-radius: 12px;
-            border: 1px dashed #b8cde0;
+            padding: 1.5rem;
+            border-radius: 16px;
+            border: 1px solid #b8cde0;
         }
 
         .metrics-label {
-            font-size: 0.8rem;
-            font-weight: 700;
+            font-size: 0.75rem;
+            font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.1em;
             color: var(--accent-color);
-            margin-bottom: 0.75rem;
+            margin-bottom: 1rem;
             display: block;
         }
 
@@ -313,29 +284,21 @@
 
         .pill {
             background-color: white;
-            border: 1px solid var(--pill-border);
-            color: var(--text-primary);
-            font-size: 0.8rem;
-            font-weight: 600;
-            padding: 0.3rem 0.8rem;
-            border-radius: 99px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            color: var(--accent-color);
+            font-size: 0.85rem;
+            font-weight: 700;
+            padding: 0.4rem 0.9rem;
+            border-radius: 9px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
         }
 
-        /* Switch back to 3x2 Grid for Desktop/Tablets */
+        /* Desktop Adjustments */
         @media (min-width: 768px) {
-            .grid-container {
-                grid-template-columns: repeat(3, 1fr);
-                grid-template-rows: repeat(2, 1fr);
-                gap: 1.5rem;
-            }
-            .header-section h1 {
-                font-size: 2rem;
-            }
-            .summary-card { padding: 2rem; }
-            .summary-card h2 { font-size: 1.4rem; }
-            .full-card { padding: 3rem; }
-            .full-card h2 { font-size: 2rem; }
+            .list-item { padding: 1.5rem 2rem; }
+            .list-number { font-size: 4rem; width: 80px; }
+            .list-title { font-size: 1.4rem; }
+            .full-card { padding: 3.5rem; }
+            .full-card h2 { font-size: 2.2rem; }
         }
     </style>
 </head>
@@ -345,30 +308,49 @@
     <div id="dashboard-view">
         <div class="header-section">
             <h1>The 6 Marks of Courageous Winning</h1>
-            <div class="progress-container">
-                <div class="progress-bar" id="progress-bar"></div>
-            </div>
-            <p class="progress-text" id="progress-text">0 of 6 Unlocked</p>
         </div>
 
-        <div class="grid-container">
-            <div class="summary-card" id="card-1" data-number="1" onclick="showDetail(1)">
-                <h2>The Mission Is Moving</h2>
+        <div class="list-container">
+            <!-- Item 1 -->
+            <div class="list-item" id="item-1" onclick="showDetail(1)">
+                <div class="list-number">1</div>
+                <div class="list-title">The Mission Is Moving</div>
+                <div class="list-chevron">›</div>
             </div>
-            <div class="summary-card" id="card-2" data-number="2" onclick="showDetail(2)">
-                <h2>Leaders Are Multiplying</h2>
+            
+            <!-- Item 2 -->
+            <div class="list-item" id="item-2" onclick="showDetail(2)">
+                <div class="list-number">2</div>
+                <div class="list-title">Leaders Are Multiplying</div>
+                <div class="list-chevron">›</div>
             </div>
-            <div class="summary-card" id="card-3" data-number="3" onclick="showDetail(3)">
-                <h2>Men Are Transforming</h2>
+            
+            <!-- Item 3 -->
+            <div class="list-item" id="item-3" onclick="showDetail(3)">
+                <div class="list-number">3</div>
+                <div class="list-title">Men Are Transforming</div>
+                <div class="list-chevron">›</div>
             </div>
-            <div class="summary-card" id="card-4" data-number="4" onclick="showDetail(4)">
-                <h2>Groups Feel Like Brotherhood</h2>
+            
+            <!-- Item 4 -->
+            <div class="list-item" id="item-4" onclick="showDetail(4)">
+                <div class="list-number">4</div>
+                <div class="list-title">Groups Feel Like Brotherhood</div>
+                <div class="list-chevron">›</div>
             </div>
-            <div class="summary-card" id="card-5" data-number="5" onclick="showDetail(5)">
-                <h2>The Movement Is Spreading</h2>
+            
+            <!-- Item 5 -->
+            <div class="list-item" id="item-5" onclick="showDetail(5)">
+                <div class="list-number">5</div>
+                <div class="list-title">The Movement Is Spreading</div>
+                <div class="list-chevron">›</div>
             </div>
-            <div class="summary-card" id="card-6" data-number="6" onclick="showDetail(6)">
-                <h2>The Culture Feels Right</h2>
+            
+            <!-- Item 6 -->
+            <div class="list-item" id="item-6" onclick="showDetail(6)">
+                <div class="list-number">6</div>
+                <div class="list-title">The Culture Feels Right</div>
+                <div class="list-chevron">›</div>
             </div>
         </div>
     </div>
@@ -376,157 +358,148 @@
     <!-- DETAIL VIEW -->
     <div id="detail-view">
         <div class="detail-wrapper">
-            <button class="back-btn" onclick="showDashboard()">&larr; Back to Dashboard</button>
+            <button class="back-btn" onclick="showDashboard()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 2px;"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                Dashboard
+            </button>
 
             <!-- Detail 1 -->
-            <div id="detail-1" class="full-card" data-number="1">
-                <div class="card-content">
-                    <div class="card-header-row">
-                        <div class="card-number-badge">1</div>
-                        <h2>The Mission Is Moving</h2>
-                    </div>
-                    <p class="intro">We’re winning when men are finding real faith and taking real steps toward Jesus.</p>
-                    <ul>
-                        <li>New men are stepping into Courageous every month.</li>
-                        <li>Men under 40 are actively engaging, not just attending.</li>
-                        <li>Every campus can point to fresh stories of life change.</li>
-                        <li>The conversation about men is happening outside of church walls (gyms, homes, workplaces).</li>
-                    </ul>
-                    <div class="card-metrics">
-                        <span class="metrics-label">How We Measure It</span>
-                        <div class="pill-container">
-                            <span class="pill">New Men</span>
-                            <span class="pill">Under-40 Participation</span>
-                            <span class="pill">First-time Attendance</span>
-                            <span class="pill">Stories Shared</span>
-                        </div>
+            <div id="detail-1" class="full-card">
+                <div class="card-header-row">
+                    <div class="card-number-badge">1</div>
+                    <h2>The Mission Is Moving</h2>
+                </div>
+                <p class="intro">We’re winning when men are finding real faith and taking real steps toward Jesus.</p>
+                <ul>
+                    <li>New men are stepping into Courageous every month.</li>
+                    <li>Men under 40 are actively engaging, not just attending.</li>
+                    <li>Every campus can point to fresh stories of life change.</li>
+                    <li>The conversation about men is happening outside of church walls (gyms, homes, workplaces).</li>
+                </ul>
+                <div class="card-metrics">
+                    <span class="metrics-label">How We Measure It</span>
+                    <div class="pill-container">
+                        <span class="pill">New Men</span>
+                        <span class="pill">Under-40 Participation</span>
+                        <span class="pill">First-time Attendance</span>
+                        <span class="pill">Stories Shared</span>
                     </div>
                 </div>
             </div>
 
             <!-- Detail 2 -->
-            <div id="detail-2" class="full-card" data-number="2">
-                <div class="card-content">
-                    <div class="card-header-row">
-                        <div class="card-number-badge">2</div>
-                        <h2>Leaders Are Multiplying</h2>
-                    </div>
-                    <p class="intro">We’re winning when men aren’t waiting for permission—they’re leading with courage.</p>
-                    <ul>
-                        <li>Table leaders are being developed into coaches; coaches are becoming head coaches.</li>
-                        <li>Every man knows who he’s raising up behind him.</li>
-                        <li>Leadership huddles are full and relationally strong.</li>
-                        <li>Pastors aren’t managing; they’re mentoring.</li>
-                    </ul>
-                    <div class="card-metrics">
-                        <span class="metrics-label">How We Measure It</span>
-                        <div class="pill-container">
-                            <span class="pill">Leaders Added</span>
-                            <span class="pill">% Advancing Up Leader Pipeline</span>
-                            <span class="pill">Huddle Attendance</span>
-                        </div>
+            <div id="detail-2" class="full-card">
+                <div class="card-header-row">
+                    <div class="card-number-badge">2</div>
+                    <h2>Leaders Are Multiplying</h2>
+                </div>
+                <p class="intro">We’re winning when men aren’t waiting for permission—they’re leading with courage.</p>
+                <ul>
+                    <li>Table leaders are being developed into coaches; coaches are becoming head coaches.</li>
+                    <li>Every man knows who he’s raising up behind him.</li>
+                    <li>Leadership huddles are full and relationally strong.</li>
+                    <li>Pastors aren’t managing; they’re mentoring.</li>
+                </ul>
+                <div class="card-metrics">
+                    <span class="metrics-label">How We Measure It</span>
+                    <div class="pill-container">
+                        <span class="pill">Leaders Added</span>
+                        <span class="pill">% Advancing Up Leader Pipeline</span>
+                        <span class="pill">Huddle Attendance</span>
                     </div>
                 </div>
             </div>
 
             <!-- Detail 3 -->
-            <div id="detail-3" class="full-card" data-number="3">
-                <div class="card-content">
-                    <div class="card-header-row">
-                        <div class="card-number-badge">3</div>
-                        <h2>Men Are Transforming</h2>
-                    </div>
-                    <p class="intro">We’re winning when men are taking what happens in a group and living it everywhere else.</p>
-                    <ul>
-                        <li>You can hear language shifts — from “me” to “we.”</li>
-                        <li>Marriages are being restored, Fathers are being present, and purpose is being discovered.</li>
-                        <li>Men are practicing the Spiritual Practices: Sabbath, Prayer, Bible Reading, Fasting, and authentic community.</li>
-                        <li>Stories of healing and breakthrough are normal.</li>
-                    </ul>
-                    <div class="card-metrics">
-                        <span class="metrics-label">How We Measure It</span>
-                        <div class="pill-container">
-                            <span class="pill">Transformation Stories</span>
-                            <span class="pill">Baptisms</span>
-                            <span class="pill">Engagement in Courses</span>
-                        </div>
+            <div id="detail-3" class="full-card">
+                <div class="card-header-row">
+                    <div class="card-number-badge">3</div>
+                    <h2>Men Are Transforming</h2>
+                </div>
+                <p class="intro">We’re winning when men are taking what happens in a group and living it everywhere else.</p>
+                <ul>
+                    <li>You can hear language shifts — from “me” to “we.”</li>
+                    <li>Marriages are being restored, Fathers are being present, and purpose is being discovered.</li>
+                    <li>Men are practicing the Spiritual Practices: Sabbath, Prayer, Bible Reading, Fasting, and authentic community.</li>
+                    <li>Stories of healing and breakthrough are normal.</li>
+                </ul>
+                <div class="card-metrics">
+                    <span class="metrics-label">How We Measure It</span>
+                    <div class="pill-container">
+                        <span class="pill">Transformation Stories</span>
+                        <span class="pill">Baptisms</span>
+                        <span class="pill">Engagement in Courses</span>
                     </div>
                 </div>
             </div>
 
             <!-- Detail 4 -->
-            <div id="detail-4" class="full-card" data-number="4">
-                <div class="card-content">
-                    <div class="card-header-row">
-                        <div class="card-number-badge">4</div>
-                        <h2>Groups Feel Like Brotherhood</h2>
-                    </div>
-                    <p class="intro">We’re winning when every man knows he’s not walking alone.</p>
-                    <ul>
-                        <li>Tables are safe, consistent, and relational — not lecture halls.</li>
-                        <li>Every man feels noticed, named, and known.</li>
-                        <li>Group nights are marked by vulnerability, laughter, and purpose.</li>
-                        <li>Men take care of each other — practically and spiritually.</li>
-                    </ul>
-                    <div class="card-metrics">
-                        <span class="metrics-label">How We Measure It</span>
-                        <div class="pill-container">
-                            <span class="pill">Group Retention</span>
-                            <span class="pill">Attendance</span>
-                            <span class="pill">Qualitative Feedback</span>
-                        </div>
+            <div id="detail-4" class="full-card">
+                <div class="card-header-row">
+                    <div class="card-number-badge">4</div>
+                    <h2>Groups Feel Like Brotherhood</h2>
+                </div>
+                <p class="intro">We’re winning when every man knows he’s not walking alone.</p>
+                <ul>
+                    <li>Tables are safe, consistent, and relational — not lecture halls.</li>
+                    <li>Every man feels noticed, named, and known.</li>
+                    <li>Group nights are marked by vulnerability, laughter, and purpose.</li>
+                    <li>Men take care of each other — practically and spiritually.</li>
+                </ul>
+                <div class="card-metrics">
+                    <span class="metrics-label">How We Measure It</span>
+                    <div class="pill-container">
+                        <span class="pill">Group Retention</span>
+                        <span class="pill">Attendance</span>
+                        <span class="pill">Qualitative Feedback</span>
                     </div>
                 </div>
             </div>
 
             <!-- Detail 5 -->
-            <div id="detail-5" class="full-card" data-number="5">
-                <div class="card-content">
-                    <div class="card-header-row">
-                        <div class="card-number-badge">5</div>
-                        <h2>The Movement Is Spreading</h2>
-                    </div>
-                    <p class="intro">We’re winning when Courageous doesn’t stay in our buildings—it spreads to our city and beyond.</p>
-                    <ul>
-                        <li>Men are launching groups in gyms, workplaces, sports leagues, and neighborhoods.</li>
-                        <li>Other churches are learning from what God’s doing at GFC.</li>
-                        <li>The playbook is being used nationally to equip men’s leaders.</li>
-                        <li>Social and digital reach is multiplying the message.</li>
-                    </ul>
-                    <div class="card-metrics">
-                        <span class="metrics-label">How We Measure It</span>
-                        <div class="pill-container">
-                            <span class="pill">Off-campus Groups</span>
-                            <span class="pill">External Partnerships</span>
-                            <span class="pill">Digital Engagement</span>
-                            <span class="pill">Churches Resourced</span>
-                        </div>
+            <div id="detail-5" class="full-card">
+                <div class="card-header-row">
+                    <div class="card-number-badge">5</div>
+                    <h2>The Movement Is Spreading</h2>
+                </div>
+                <p class="intro">We’re winning when Courageous doesn’t stay in our buildings—it spreads to our city and beyond.</p>
+                <ul>
+                    <li>Men are launching groups in gyms, workplaces, sports leagues, and neighborhoods.</li>
+                    <li>Other churches are learning from what God’s doing at GFC.</li>
+                    <li>The playbook is being used nationally to equip men’s leaders.</li>
+                    <li>Social and digital reach is multiplying the message.</li>
+                </ul>
+                <div class="card-metrics">
+                    <span class="metrics-label">How We Measure It</span>
+                    <div class="pill-container">
+                        <span class="pill">Off-campus Groups</span>
+                        <span class="pill">External Partnerships</span>
+                        <span class="pill">Digital Engagement</span>
+                        <span class="pill">Churches Resourced</span>
                     </div>
                 </div>
             </div>
 
             <!-- Detail 6 -->
-            <div id="detail-6" class="full-card" data-number="6">
-                <div class="card-content">
-                    <div class="card-header-row">
-                        <div class="card-number-badge">6</div>
-                        <h2>The Culture Feels Right</h2>
-                    </div>
-                    <p class="intro">We’re winning when the tone of our ministry feels like Jesus—humble, hungry, and hustling.</p>
-                    <ul>
-                        <li>Leaders are humble, hungry, and hustle.</li>
-                        <li>There’s laughter, brotherhood, and mission clarity.</li>
-                        <li>Wins are celebrated, not hoarded.</li>
-                        <li>There’s unity among campuses — not comparison.</li>
-                    </ul>
-                    <div class="card-metrics">
-                        <span class="metrics-label">How We Measure It</span>
-                        <div class="pill-container">
-                            <span class="pill">Team Health</span>
-                            <span class="pill">Pastor Alignment</span>
-                            <span class="pill">Retention</span>
-                            <span class="pill">Qualitative Surveys</span>
-                        </div>
+            <div id="detail-6" class="full-card">
+                <div class="card-header-row">
+                    <div class="card-number-badge">6</div>
+                    <h2>The Culture Feels Right</h2>
+                </div>
+                <p class="intro">We’re winning when the tone of our ministry feels like Jesus—humble, hungry, and hustling.</p>
+                <ul>
+                    <li>Leaders are humble, hungry, and hustle.</li>
+                    <li>There’s laughter, brotherhood, and mission clarity.</li>
+                    <li>Wins are celebrated, not hoarded.</li>
+                    <li>There’s unity among campuses — not comparison.</li>
+                </ul>
+                <div class="card-metrics">
+                    <span class="metrics-label">How We Measure It</span>
+                    <div class="pill-container">
+                        <span class="pill">Team Health</span>
+                        <span class="pill">Pastor Alignment</span>
+                        <span class="pill">Retention</span>
+                        <span class="pill">Qualitative Surveys</span>
                     </div>
                 </div>
             </div>
@@ -535,52 +508,22 @@
     </div>
 
     <script>
-        const unlockedMarks = new Set();
-        const totalMarks = 6;
-
         function showDetail(cardNumber) {
-            // Hide dashboard
             document.getElementById('dashboard-view').style.display = 'none';
-            
-            // Hide all detail cards
             document.querySelectorAll('.full-card').forEach(card => card.classList.remove('active'));
             
-            // Show detail view container and specific card
             document.getElementById('detail-view').style.display = 'block';
             document.getElementById(`detail-${cardNumber}`).classList.add('active');
             
-            // Scroll to top of detail view
             document.getElementById('detail-view').scrollTop = 0;
 
-            // Gamification logic: Mark as unlocked
-            unlockedMarks.add(cardNumber);
-            updateProgress();
-            
-            // Visually mark the grid card as read
-            document.getElementById(`card-${cardNumber}`).classList.add('unlocked');
+            // Gamification logic: Highlight the card blue once it's been clicked
+            document.getElementById(`item-${cardNumber}`).classList.add('unlocked');
         }
 
         function showDashboard() {
-            // Hide detail view
             document.getElementById('detail-view').style.display = 'none';
-            
-            // Show dashboard
             document.getElementById('dashboard-view').style.display = 'flex';
-        }
-
-        function updateProgress() {
-            const count = unlockedMarks.size;
-            const percentage = (count / totalMarks) * 100;
-            
-            document.getElementById('progress-bar').style.width = `${percentage}%`;
-            
-            const textElement = document.getElementById('progress-text');
-            if (count === totalMarks) {
-                textElement.innerHTML = "🎉 100% Fully Unlocked!";
-                textElement.style.color = "var(--accent-color)";
-            } else {
-                textElement.innerText = `${count} of ${totalMarks} Unlocked`;
-            }
         }
     </script>
 </body>
