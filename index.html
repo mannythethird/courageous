@@ -3,18 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The 6 Marks of Courageous Winning</title>
+    <title>Courageous Vision</title>
     <style>
         :root {
             --bg-color: #eeeae2;
             --card-bg: #ffffff;
             --text-primary: #1e293b;
-            --text-secondary: #64748b;
+            --text-secondary: #475569;
             --accent-color: #1e4b7b; 
-            --accent-light: #e6eff8; 
+            --accent-light: #e6eff8; /* Soft light blue */
+            --number-color: #e2e8f0; 
+            --grid-number-color: #94a3b8; 
             --pill-border: #e2e8f0;
-            --grid-number-color: #94a3b8;
-            --transition-speed: 0.3s;
+            --transition-speed: 0.25s;
         }
 
         * {
@@ -27,252 +28,219 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-primary);
-            height: 100dvh; 
-            overflow: hidden; 
+            height: 100vh; 
             display: flex;
             flex-direction: column;
+            padding: 1.5rem;
+            overflow-y: auto; 
         }
 
-        /* --- DASHBOARD VIEW --- */
-        #dashboard-view {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            padding: 2rem 1.25rem;
-            max-width: 800px;
-            margin: 0 auto;
-            width: 100%;
-            animation: fadeIn var(--transition-speed) ease-in;
-        }
-
-        .header-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        .page-header {
+            text-align: center;
             flex-shrink: 0;
             margin-bottom: 1.5rem;
         }
 
-        .header-section h1 {
-            font-size: clamp(1.6rem, 6vw, 2.2rem);
+        .page-header h1 {
+            font-size: 2rem;
             font-weight: 800;
-            color: var(--text-primary);
-            line-height: 1.1;
-            text-align: center;
             letter-spacing: -0.02em;
         }
 
-        /* The Stacked List */
-        .list-container {
+        /* --- DASHBOARD (Grid View) --- */
+        #grid-view {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 1rem;
+            flex-grow: 1; 
+            animation: fadeIn var(--transition-speed) ease-in;
+        }
+
+        .summary-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--pill-border);
+            border-radius: 12px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all var(--transition-speed) ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
             display: flex;
             flex-direction: column;
-            gap: 0.85rem;
-            flex-grow: 1; 
-            justify-content: center; /* Centers the list perfectly */
+            align-items: flex-end;
+            justify-content: center;
+            text-align: right;
+            padding: 1.5rem 2rem 1.5rem 1rem;
         }
 
-        .list-item {
-            background-color: var(--card-bg);
-            border-radius: 16px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            padding: 1rem 1.5rem 1rem 1rem;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
-            border: 1px solid var(--pill-border);
-            -webkit-tap-highlight-color: transparent;
+        .summary-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            border-color: var(--accent-color);
         }
 
-        .list-item:active {
-            transform: scale(0.97);
-        }
-
-        /* The Large Styled Number */
-        .list-number {
-            font-size: 3.5rem;
+        .summary-card::before {
+            content: attr(data-number);
+            position: absolute;
+            font-size: 13rem;
             font-weight: 900;
             color: var(--grid-number-color);
-            opacity: 0.35;
-            width: 60px;
-            text-align: center;
+            opacity: 0.25; 
+            z-index: 0;
             line-height: 1;
-            flex-shrink: 0;
-            margin-right: 0.75rem;
-            transition: all 0.3s ease;
+            top: 50%;
+            left: -15px;
+            transform: translateY(-50%);
+            pointer-events: none;
         }
 
-        .list-title {
-            font-size: 1.15rem;
+        .summary-card h2 {
+            position: relative;
+            z-index: 1;
+            font-size: 1.4rem;
             font-weight: 800;
             color: var(--text-primary);
-            flex-grow: 1;
-            line-height: 1.2;
-            transition: color 0.3s ease;
-        }
-
-        .list-chevron {
-            color: var(--grid-number-color);
-            font-size: 1.5rem;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            transform: translateX(0);
-        }
-
-        /* STATE: Unlocked (Whole Card Turns Blue) */
-        .list-item.unlocked {
-            background-color: var(--accent-color);
-            border-color: var(--accent-color);
-            box-shadow: 0 8px 15px rgba(30, 75, 123, 0.25);
-        }
-        
-        .list-item.unlocked .list-number {
-            color: #ffffff;
-            opacity: 0.25; /* Soft white watermark effect against the dark blue */
-        }
-
-        .list-item.unlocked .list-title {
-            color: #ffffff;
-        }
-
-        .list-item.unlocked .list-chevron {
-            color: #ffffff;
-            opacity: 0.5;
-            transform: translateX(4px);
         }
 
         /* --- DETAIL VIEW --- */
         #detail-view {
             display: none;
-            height: 100dvh;
-            overflow-y: auto; 
-            padding: 1.5rem 1rem 4rem 1rem;
-            background-color: var(--bg-color);
-            animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .detail-wrapper {
             max-width: 800px;
             margin: 0 auto;
+            width: 100%;
+            animation: fadeIn var(--transition-speed) ease-in;
+            padding-bottom: 2rem;
         }
 
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(30px); }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .back-btn {
-            background: #ffffff;
+            background: none;
             border: none;
-            color: var(--text-primary);
-            font-size: 0.95rem;
+            color: var(--accent-color);
+            font-size: 1rem;
             font-weight: 700;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
             margin-bottom: 1.5rem;
-            padding: 0.75rem 1.25rem;
-            border-radius: 99px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-            transition: transform 0.2s ease;
-            position: sticky;
-            top: 1rem;
-            z-index: 50;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: background 0.2s;
         }
 
-        .back-btn:active {
-            transform: scale(0.95);
+        .back-btn:hover {
+            background-color: var(--card-bg);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
 
         .full-card {
             display: none;
             background-color: var(--card-bg);
-            border-radius: 24px;
-            padding: 2.5rem 1.75rem;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05);
-            border: 1px solid #ffffff;
+            border-radius: 12px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--pill-border);
+            position: relative;
+            overflow: hidden;
         }
 
         .full-card.active {
             display: block;
+        }
+        
+        .full-card::before {
+            content: attr(data-number);
+            position: absolute;
+            top: -30px;
+            right: -10px;
+            font-size: 15rem;
+            font-weight: 900;
+            color: var(--number-color);
+            line-height: 1;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .card-content {
+            position: relative;
+            z-index: 1;
         }
 
         .card-header-row {
             display: flex;
             align-items: center;
             gap: 1rem;
-            margin-bottom: 1.25rem;
+            margin-bottom: 1rem;
         }
 
         .card-number-badge {
-            background-color: var(--accent-color);
-            color: #ffffff;
+            background-color: var(--accent-light);
+            color: var(--accent-color);
             font-size: 1.5rem;
             font-weight: 800;
-            width: 48px;
-            height: 48px;
+            width: 45px;
+            height: 45px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 14px;
+            border-radius: 50%;
             flex-shrink: 0;
-            box-shadow: 0 6px 12px rgba(30, 75, 123, 0.2);
         }
 
         .full-card h2 {
-            font-size: 1.6rem;
+            font-size: 1.8rem;
             font-weight: 800;
-            line-height: 1.15;
-            letter-spacing: -0.02em;
         }
 
         .intro {
             font-size: 1.1rem;
             font-weight: 600;
             color: var(--accent-color);
-            margin-bottom: 1.75rem;
-            line-height: 1.4;
+            margin-bottom: 1.5rem;
         }
 
         ul {
             list-style-type: none;
-            margin-bottom: 2.5rem;
+            margin-bottom: 2rem;
         }
 
         li {
             position: relative;
-            padding-left: 1.75rem;
-            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+            margin-bottom: 0.75rem;
             color: var(--text-secondary);
             font-size: 1rem;
-            line-height: 1.5;
         }
 
         li::before {
-            content: "→";
+            content: "•";
             color: var(--accent-color);
-            font-weight: 800;
-            font-size: 1.1rem;
+            font-size: 1.5rem;
             position: absolute;
             left: 0;
-            top: 0;
+            top: -0.3rem;
         }
 
         .card-metrics {
-            background-color: var(--accent-light);
-            padding: 1.5rem;
-            border-radius: 16px;
-            border: 1px solid #b8cde0;
+            background-color: var(--accent-light); /* Uses the soft light blue */
+            padding: 1.25rem;
+            border-radius: 8px;
+            border: 1px dashed #b8cde0; /* Slightly darker complementary blue border */
         }
 
         .metrics-label {
-            font-size: 0.75rem;
-            font-weight: 800;
+            font-size: 0.8rem;
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--accent-color);
-            margin-bottom: 1rem;
+            letter-spacing: 0.05em;
+            color: var(--accent-color); /* Matches the blue text to the blue bg */
+            margin-bottom: 0.75rem;
             display: block;
         }
 
@@ -284,87 +252,66 @@
 
         .pill {
             background-color: white;
-            color: var(--accent-color);
+            border: 1px solid var(--pill-border);
+            color: var(--text-primary);
             font-size: 0.85rem;
-            font-weight: 700;
-            padding: 0.4rem 0.9rem;
-            border-radius: 9px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+            font-weight: 600;
+            padding: 0.3rem 0.8rem;
+            border-radius: 99px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05); /* Adds a tiny shadow so white pops off the blue */
         }
 
-        /* Desktop Adjustments */
-        @media (min-width: 768px) {
-            .list-item { padding: 1.5rem 2rem; }
-            .list-number { font-size: 4rem; width: 80px; }
-            .list-title { font-size: 1.4rem; }
-            .full-card { padding: 3.5rem; }
-            .full-card h2 { font-size: 2.2rem; }
+        /* Responsive adjustments for smaller screens (tablets/phones) */
+        @media (max-width: 900px) {
+            body { height: auto; overflow-y: auto; }
+            #grid-view { 
+                grid-template-columns: repeat(2, 1fr); 
+                grid-template-rows: auto;
+                height: auto; 
+            }
+            .summary-card { padding: 3rem 2rem 3rem 1rem; align-items: flex-end; }
+        }
+        @media (max-width: 600px) {
+            #grid-view { grid-template-columns: 1fr; }
+            .full-card { padding: 1.5rem; }
         }
     </style>
 </head>
 <body>
 
-    <!-- DASHBOARD VIEW -->
-    <div id="dashboard-view">
-        <div class="header-section">
-            <h1>The 6 Marks of Courageous Winning</h1>
-        </div>
+    <div class="page-header" id="main-header">
+        <h1>The 6 Marks of Courageous Winning</h1>
+    </div>
 
-        <div class="list-container">
-            <!-- Item 1 -->
-            <div class="list-item" id="item-1" onclick="showDetail(1)">
-                <div class="list-number">1</div>
-                <div class="list-title">The Mission Is Moving</div>
-                <div class="list-chevron">›</div>
-            </div>
-            
-            <!-- Item 2 -->
-            <div class="list-item" id="item-2" onclick="showDetail(2)">
-                <div class="list-number">2</div>
-                <div class="list-title">Leaders Are Multiplying</div>
-                <div class="list-chevron">›</div>
-            </div>
-            
-            <!-- Item 3 -->
-            <div class="list-item" id="item-3" onclick="showDetail(3)">
-                <div class="list-number">3</div>
-                <div class="list-title">Men Are Transforming</div>
-                <div class="list-chevron">›</div>
-            </div>
-            
-            <!-- Item 4 -->
-            <div class="list-item" id="item-4" onclick="showDetail(4)">
-                <div class="list-number">4</div>
-                <div class="list-title">Groups Feel Like Brotherhood</div>
-                <div class="list-chevron">›</div>
-            </div>
-            
-            <!-- Item 5 -->
-            <div class="list-item" id="item-5" onclick="showDetail(5)">
-                <div class="list-number">5</div>
-                <div class="list-title">The Movement Is Spreading</div>
-                <div class="list-chevron">›</div>
-            </div>
-            
-            <!-- Item 6 -->
-            <div class="list-item" id="item-6" onclick="showDetail(6)">
-                <div class="list-number">6</div>
-                <div class="list-title">The Culture Feels Right</div>
-                <div class="list-chevron">›</div>
-            </div>
+    <!-- DASHBOARD VIEW -->
+    <div id="grid-view">
+        <div class="summary-card" data-number="1" onclick="showDetail(1)">
+            <h2>The Mission Is Moving</h2>
+        </div>
+        <div class="summary-card" data-number="2" onclick="showDetail(2)">
+            <h2>Leaders Are Multiplying</h2>
+        </div>
+        <div class="summary-card" data-number="3" onclick="showDetail(3)">
+            <h2>Men Are Transforming</h2>
+        </div>
+        <div class="summary-card" data-number="4" onclick="showDetail(4)">
+            <h2>Groups Feel Like Brotherhood</h2>
+        </div>
+        <div class="summary-card" data-number="5" onclick="showDetail(5)">
+            <h2>The Movement Is Spreading</h2>
+        </div>
+        <div class="summary-card" data-number="6" onclick="showDetail(6)">
+            <h2>The Culture Feels Right</h2>
         </div>
     </div>
 
     <!-- DETAIL VIEW -->
     <div id="detail-view">
-        <div class="detail-wrapper">
-            <button class="back-btn" onclick="showDashboard()">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 2px;"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-                Dashboard
-            </button>
+        <button class="back-btn" onclick="showGrid()">&larr; Back to Dashboard</button>
 
-            <!-- Detail 1 -->
-            <div id="detail-1" class="full-card">
+        <!-- Detail 1 -->
+        <div id="detail-1" class="full-card" data-number="1">
+            <div class="card-content">
                 <div class="card-header-row">
                     <div class="card-number-badge">1</div>
                     <h2>The Mission Is Moving</h2>
@@ -386,9 +333,11 @@
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Detail 2 -->
-            <div id="detail-2" class="full-card">
+        <!-- Detail 2 -->
+        <div id="detail-2" class="full-card" data-number="2">
+            <div class="card-content">
                 <div class="card-header-row">
                     <div class="card-number-badge">2</div>
                     <h2>Leaders Are Multiplying</h2>
@@ -409,9 +358,11 @@
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Detail 3 -->
-            <div id="detail-3" class="full-card">
+        <!-- Detail 3 -->
+        <div id="detail-3" class="full-card" data-number="3">
+            <div class="card-content">
                 <div class="card-header-row">
                     <div class="card-number-badge">3</div>
                     <h2>Men Are Transforming</h2>
@@ -432,9 +383,11 @@
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Detail 4 -->
-            <div id="detail-4" class="full-card">
+        <!-- Detail 4 -->
+        <div id="detail-4" class="full-card" data-number="4">
+            <div class="card-content">
                 <div class="card-header-row">
                     <div class="card-number-badge">4</div>
                     <h2>Groups Feel Like Brotherhood</h2>
@@ -455,9 +408,11 @@
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Detail 5 -->
-            <div id="detail-5" class="full-card">
+        <!-- Detail 5 -->
+        <div id="detail-5" class="full-card" data-number="5">
+            <div class="card-content">
                 <div class="card-header-row">
                     <div class="card-number-badge">5</div>
                     <h2>The Movement Is Spreading</h2>
@@ -479,9 +434,11 @@
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Detail 6 -->
-            <div id="detail-6" class="full-card">
+        <!-- Detail 6 -->
+        <div id="detail-6" class="full-card" data-number="6">
+            <div class="card-content">
                 <div class="card-header-row">
                     <div class="card-number-badge">6</div>
                     <h2>The Culture Feels Right</h2>
@@ -503,27 +460,29 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 
     <script>
         function showDetail(cardNumber) {
-            document.getElementById('dashboard-view').style.display = 'none';
-            document.querySelectorAll('.full-card').forEach(card => card.classList.remove('active'));
+            document.getElementById('grid-view').style.display = 'none';
+            document.getElementById('main-header').style.display = 'none'; 
+            
+            const fullCards = document.querySelectorAll('.full-card');
+            fullCards.forEach(card => card.classList.remove('active'));
             
             document.getElementById('detail-view').style.display = 'block';
-            document.getElementById(`detail-${cardNumber}`).classList.add('active');
+            document.getElementById('detail-' + cardNumber).classList.add('active');
             
-            document.getElementById('detail-view').scrollTop = 0;
-
-            // Gamification logic: Highlight the card blue once it's been clicked
-            document.getElementById(`item-${cardNumber}`).classList.add('unlocked');
+            window.scrollTo({ top: 0, behavior: 'instant' });
         }
 
-        function showDashboard() {
+        function showGrid() {
             document.getElementById('detail-view').style.display = 'none';
-            document.getElementById('dashboard-view').style.display = 'flex';
+            document.getElementById('main-header').style.display = 'block';
+            document.getElementById('grid-view').style.display = 'grid';
+            
+            window.scrollTo({ top: 0, behavior: 'instant' });
         }
     </script>
 </body>
