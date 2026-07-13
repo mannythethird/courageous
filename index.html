@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courageous Men's Ministry - Vision</title>
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --accent-color: #0284c7;
+            --accent-light: #e0f2fe;
+            --number-color: #f1f5f9;
+            --pill-bg: #f1f5f9;
+            --pill-border: #e2e8f0;
+            --transition-speed: 0.3s;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* --- Views --- */
+        #grid-view {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            animation: fadeIn var(--transition-speed) ease-in;
+        }
+
+        #detail-view {
+            display: none;
+            animation: fadeIn var(--transition-speed) ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- Summary Cards (Grid) --- */
+        .summary-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--pill-border);
+            border-radius: 16px;
+            padding: 3rem 2rem;
+            cursor: pointer;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            border-color: var(--accent-light);
+        }
+
+        .summary-card::before {
+            content: attr(data-number);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 15rem;
+            font-weight: 900;
+            color: var(--number-color);
+            z-index: 0;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .summary-card h2 {
+            position: relative;
+            z-index: 1;
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .click-prompt {
+            position: relative;
+            z-index: 1;
+            color: var(--accent-color);
+            font-size: 0.9rem;
+            font-weight: 600;
+            background: var(--accent-light);
+            padding: 0.4rem 1rem;
+            border-radius: 99px;
+            transition: background 0.2s;
+        }
+
+        .summary-card:hover .click-prompt {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        /* --- Detail Cards --- */
+        .back-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+
+        .back-btn:hover {
+            background-color: #e2e8f0;
+            color: var(--text-primary);
+        }
+
+        .full-card {
+            display: none; /* Hidden by default, toggled via JS */
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 3rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .full-card.active {
+            display: block;
+        }
+
+        .full-card::before {
+            content: attr(data-number);
+            position: absolute;
+            top: -30px;
+            right: -10px;
+            font-size: 15rem;
+            font-weight: 900;
+            color: var(--number-color);
+            line-height: 1;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .card-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .card-number-badge {
+            display: inline-block;
+            background-color: var(--accent-light);
+            color: var(--accent-color);
+            font-size: 1.5rem;
+            font-weight: 700;
+            width: 50px;
+            height: 50px;
+            line-height: 50px;
+            text-align: center;
+            border-radius: 50%;
+            margin-bottom: 1.5rem;
+        }
+
+        .full-card h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .intro {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--accent-color);
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid var(--number-color);
+        }
+
+        ul {
+            list-style-type: none;
+            margin-bottom: 3rem;
+        }
+
+        li {
+            position: relative;
+            padding-left: 2rem;
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        li::before {
+            content: "•";
+            color: var(--accent-color);
+            font-size: 2rem;
+            position: absolute;
+            left: 0;
+            top: -0.4rem;
+        }
+
+        .card-metrics {
+            background-color: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px dashed var(--pill-border);
+        }
+
+        .metrics-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .pill-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .pill {
+            background-color: white;
+            border: 1px solid var(--pill-border);
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            font-weight: 600;
+            padding: 0.4rem 1rem;
+            border-radius: 99px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body { padding: 1rem; }
+            .full-card { padding: 2rem; }
+            .full-card h2 { font-size: 1.5rem; }
+            .full-card::before { font-size: 10rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="page-header">
+        <h1>Courageous Men's Ministry</h1>
+        <p>Vision & Measurement Dashboard</p>
+    </div>
+
+    <!-- GRID VIEW (Initial Landing) -->
+    <div id="grid-view">
+        <div class="summary-card" data-number="1" onclick="showDetail(1)">
+            <h2>The Mission Is Moving</h2>
+            <span class="click-prompt">View Details &rarr;</span>
+        </div>
+        <div class="summary-card" data-number="2" onclick="showDetail(2)">
+            <h2>Leaders Are Multiplying</h2>
+            <span class="click-prompt">View Details &rarr;</span>
+        </div>
+        <div class="summary-card" data-number="3" onclick="showDetail(3)">
+            <h2>Men Are Transforming</h2>
+            <span class="click-prompt">View Details &rarr;</span>
+        </div>
+        <div class="summary-card" data-number="4" onclick="showDetail(4)">
+            <h2>Groups Feel Like Brotherhood</h2>
+            <span class="click-prompt">View Details &rarr;</span>
+        </div>
+        <div class="summary-card" data-number="5" onclick="showDetail(5)">
+            <h2>The Movement Is Spreading</h2>
+            <span class="click-prompt">View Details &rarr;</span>
+        </div>
+        <div class="summary-card" data-number="6" onclick="showDetail(6)">
+            <h2>The Culture Feels Right</h2>
+            <span class="click-prompt">View Details &rarr;</span>
+        </div>
+    </div>
+
+    <!-- DETAIL VIEW (Expanded Cards) -->
+    <div id="detail-view">
+        <button class="back-btn" onclick="showGrid()">&larr; Back to Dashboard</button>
+
+        <!-- Card 1 Detail -->
+        <div id="detail-1" class="full-card" data-number="1">
+            <div class="card-content">
+                <div class="card-number-badge">1</div>
+                <h2>The Mission Is Moving</h2>
+                <p class="intro">We’re winning when men are finding real faith and taking real steps toward Jesus.</p>
+                <ul>
+                    <li>New men are stepping into Courageous every month.</li>
+                    <li>Men under 40 are actively engaging, not just attending.</li>
+                    <li>Every campus can point to fresh stories of life change.</li>
+                    <li>The conversation about men is happening outside of church walls (gyms, homes, workplaces).</li>
+                </ul>
+                <div class="card-metrics">
+                    <span class="metrics-label">How We Measure It</span>
+                    <div class="pill-container">
+                        <span class="pill">New Men</span>
+                        <span class="pill">Under-40 Participation</span>
+                        <span class="pill">First-time Attendance</span>
+                        <span class="pill">Stories Shared</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 2 Detail -->
+        <div id="detail-2" class="full-card" data-number="2">
+            <div class="card-content">
+                <div class="card-number-badge">2</div>
+                <h2>Leaders Are Multiplying</h2>
+                <p class="intro">We’re winning when men aren’t waiting for permission—they’re leading with courage.</p>
+                <ul>
+                    <li>Table leaders are being developed into coaches; coaches are becoming head coaches.</li>
+                    <li>Every man knows who he’s raising up behind him.</li>
+                    <li>Leadership huddles are full and relationally strong.</li>
+                    <li>Pastors aren’t managing; they’re mentoring.</li>
+                </ul>
+                <div class="card-metrics">
+                    <span class="metrics-label">How We Measure It</span>
+                    <div class="pill-container">
+                        <span class="pill">Leaders Added</span>
+                        <span class="pill">% Advancing Up Leader Pipeline</span>
+                        <span class="pill">Huddle Attendance</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 3 Detail -->
+        <div id="detail-3" class="full-card" data-number="3">
+            <div class="card-content">
+                <div class="card-number-badge">3</div>
+                <h2>Men Are Transforming</h2>
+                <p class="intro">We’re winning when men are taking what happens in a group and living it everywhere else.</p>
+                <ul>
+                    <li>You can hear language shifts — from “me” to “we.”</li>
+                    <li>Marriages are being restored, Fathers are being present, and purpose is being discovered.</li>
+                    <li>Men are practicing the Spiritual Practices: Sabbath, Prayer, Bible Reading, Fasting, and authentic community.</li>
+                    <li>Stories of healing and breakthrough are normal.</li>
+                </ul>
+                <div class="card-metrics">
+                    <span class="metrics-label">How We Measure It</span>
+                    <div class="pill-container">
+                        <span class="pill">Transformation Stories (Victory Minute)</span>
+                        <span class="pill">Baptisms</span>
+                        <span class="pill">Engagement in Courses</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 4 Detail -->
+        <div id="detail-4" class="full-card" data-number="4">
+            <div class="card-content">
+                <div class="card-number-badge">4</div>
+                <h2>Groups Feel Like Brotherhood</h2>
+                <p class="intro">We’re winning when every man knows he’s not walking alone.</p>
+                <ul>
+                    <li>Tables are safe, consistent, and relational — not lecture halls.</li>
+                    <li>Every man feels noticed, named, and known.</li>
+                    <li>Group nights are marked by vulnerability, laughter, and purpose.</li>
+                    <li>Men take care of each other — practically and spiritually.</li>
+                </ul>
+                <div class="card-metrics">
+                    <span class="metrics-label">How We Measure It</span>
+                    <div class="pill-container">
+                        <span class="pill">Group Retention</span>
+                        <span class="pill">Attendance</span>
+                        <span class="pill">Qualitative Feedback</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 5 Detail -->
+        <div id="detail-5" class="full-card" data-number="5">
+            <div class="card-content">
+                <div class="card-number-badge">5</div>
+                <h2>The Movement Is Spreading</h2>
+                <p class="intro">We’re winning when Courageous doesn’t stay in our buildings—it spreads to our city and beyond.</p>
+                <ul>
+                    <li>Men are launching groups in gyms, workplaces, sports leagues, and neighborhoods.</li>
+                    <li>Other churches are learning from what God’s doing at GFC.</li>
+                    <li>The playbook is being used nationally to equip men’s leaders.</li>
+                    <li>Social and digital reach is multiplying the message.</li>
+                </ul>
+                <div class="card-metrics">
+                    <span class="metrics-label">How We Measure It</span>
+                    <div class="pill-container">
+                        <span class="pill">Off-campus Groups</span>
+                        <span class="pill">External Partnerships</span>
+                        <span class="pill">Digital Engagement</span>
+                        <span class="pill">Churches Resourced</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 6 Detail -->
+        <div id="detail-6" class="full-card" data-number="6">
+            <div class="card-content">
+                <div class="card-number-badge">6</div>
+                <h2>The Culture Feels Right</h2>
+                <p class="intro">We’re winning when the tone of our ministry feels like Jesus—humble, hungry, and hustling.</p>
+                <ul>
+                    <li>Leaders are humble, hungry, and hustle.</li>
+                    <li>There’s laughter, brotherhood, and mission clarity.</li>
+                    <li>Wins are celebrated, not hoarded.</li>
+                    <li>There’s unity among campuses — not comparison.</li>
+                </ul>
+                <div class="card-metrics">
+                    <span class="metrics-label">How We Measure It</span>
+                    <div class="pill-container">
+                        <span class="pill">Team Health</span>
+                        <span class="pill">Pastor Alignment</span>
+                        <span class="pill">Retention</span>
+                        <span class="pill">Qualitative Surveys</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showDetail(cardNumber) {
+        // Hide grid
+        document.getElementById('grid-view').style.display = 'none';
+        
+        // Hide all full cards
+        const fullCards = document.querySelectorAll('.full-card');
+        fullCards.forEach(card => card.classList.remove('active'));
+        
+        // Show detail view container
+        document.getElementById('detail-view').style.display = 'block';
+        
+        // Show specific selected card
+        document.getElementById('detail-' + cardNumber).classList.add('active');
+        
+        // Scroll to top smoothly
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function showGrid() {
+        // Hide detail view
+        document.getElementById('detail-view').style.display = 'none';
+        
+        // Show grid
+        document.getElementById('grid-view').style.display = 'grid';
+        
+        // Scroll to top smoothly
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+</script>
+
+</body>
+</html>
